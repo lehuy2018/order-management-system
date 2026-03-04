@@ -95,9 +95,27 @@
 ---
 
 - **Step 2: Setup Baseline**
-  - **Status**: 🔘 Not Started
+  - **Status**: ✅ Completed
   - **Changes Made**: 
+    - Set JAVA_HOME to JDK 1.8.0_462
+    - Attempted baseline compilation with JDK 8
+    - Attempted baseline tests with JDK 8 (skipped due to compilation failure)
   - **Review Code Changes**:
+    - Sufficiency: N/A - Verification only, no code changes
+    - Necessity: N/A - Verification only, no code changes
+      - Functional Behavior: N/A
+      - Security Controls: N/A
+  - **Verification**:
+    - Command: `mvnw.cmd clean compile test-compile` with JAVA_HOME=C:\Program Files\OpenLogic\jdk-8.0.462.08-hotspot
+    - JDK: JDK 1.8.0_462
+    - Result: **COMPILATION FAILURE** - Spring Boot 3.5.11 dependencies require Java 17+ (class file version 61.0), incompatible with JDK 8 (version 52.0)
+    - Test Result: **SKIPPED** - Cannot run tests without successful compilation
+    - **Baseline Metrics**: 
+      - Compilation: FAILED (dependency incompatibility - Spring Boot 3.5.11 requires Java 17+)
+      - Tests: NOT RUN (0/? passed)
+    - Notes: The project pom.xml is already configured for Java 21 and Spring Boot 3.5.11. This baseline failure confirms the project cannot be built with JDK 8 in its current state, validating the need for the runtime upgrade to JDK 21.
+  - **Deferred Work**: None
+  - **Commit**: 
     - Sufficiency: 
     - Necessity: 
       - Functional Behavior: 

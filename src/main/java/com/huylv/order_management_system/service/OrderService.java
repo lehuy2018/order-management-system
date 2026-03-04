@@ -1,6 +1,7 @@
 package com.huylv.order_management_system.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
@@ -33,5 +34,19 @@ public class OrderService {
         } else {
             stockService.updateStock();
         }
+    }
+
+    @Transactional
+    public void outerTest() {
+        System.out.println("Outer method");
+        innerTest(); // self-invocation
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void innerTest() {
+        System.out.println("Inner method - transactional");
+        System.out.println(
+                "Transaction active: " +
+                        TransactionSynchronizationManager.isActualTransactionActive());
     }
 }

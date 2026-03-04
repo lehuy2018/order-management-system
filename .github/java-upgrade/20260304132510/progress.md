@@ -149,7 +149,7 @@
     - Result: ✅ **COMPILATION SUCCESS** - Both main and test code compiled successfully (10 main source files + 2 test files)
     - Notes: Project compiled successfully with JDK 21 on first attempt with no code changes needed. The pom.xml was already configured for Java 21, so only runtime upgrade was required. Compilation time: 7.287s
   - **Deferred Work**: None - Tests will be run in Final Validation step
-  - **Commit**: [will be populated after commit] 
+  - **Commit**: 5572d40 - Step 3: Upgrade Java Runtime to 21 - Compile: SUCCESS 
 
 ---
 

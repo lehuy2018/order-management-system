@@ -5,6 +5,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 
 @Component
 public class LifeCycleBean implements InitializingBean, DisposableBean {
@@ -19,9 +20,14 @@ public class LifeCycleBean implements InitializingBean, DisposableBean {
         System.out.println("3. @PostConstruct called");
     }
 
+    @PreDestroy
+    public void preDestroy() {
+        System.out.println("6. @PreDestroy called");
+    }
+
     @Override
     public void destroy() throws Exception {
-        System.out.println("Destroy method called");
+        System.out.println("7. DisposableBean#destroy called");
     }
 
     @Override

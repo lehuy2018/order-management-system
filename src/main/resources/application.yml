@@ -11,3 +11,5 @@ spring:
 logging:
   level:
     '[org.springframework.transaction]': DEBUG
+    # org:
+    #   springframework: DEBUG

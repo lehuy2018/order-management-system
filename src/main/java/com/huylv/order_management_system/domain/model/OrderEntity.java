@@ -1,8 +1,12 @@
 package com.huylv.order_management_system.domain.model;
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class OrderEntity {
@@ -14,6 +18,9 @@ public class OrderEntity {
     private String customerName;
 
     private Double totalPrice;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderItem> items;
 
     public OrderEntity() {
     }

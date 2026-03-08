@@ -1,10 +1,11 @@
 package com.huylv.order_management_system.api.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,8 +41,8 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<Product> getAll() {
-        return service.findAll();
+    public Page<Product> getProducts(@NonNull Pageable pageable) {
+        return service.getProducts(pageable);
     }
 
     @GetMapping("/{id}")

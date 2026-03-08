@@ -3,6 +3,9 @@ package com.huylv.order_management_system.application.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import com.huylv.order_management_system.application.dto.ProductRequest;
@@ -45,5 +48,9 @@ public class ProductService {
         if (id != null) {
             repository.deleteById(id);
         }
+    }
+
+    public Page<Product> getProducts(@NonNull Pageable pageable) {
+        return repository.findAll(pageable);
     }
 }

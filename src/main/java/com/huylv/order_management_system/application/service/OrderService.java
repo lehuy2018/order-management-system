@@ -10,7 +10,9 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 
 import com.huylv.order_management_system.application.dto.OrderRequest;
 import com.huylv.order_management_system.application.dto.OrderResponse;
+import com.huylv.order_management_system.application.mapper.OrderMapper;
 import com.huylv.order_management_system.domain.model.OrderEntity;
+import com.huylv.order_management_system.domain.model.Product;
 import com.huylv.order_management_system.domain.repository.OrderRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -66,16 +68,15 @@ public class OrderService {
                 .toList();
     }
 
+    @Transactional
     public OrderResponse createOrder(@NonNull OrderRequest order) {
-        OrderEntity entity = new OrderEntity();
-        order.setCustomerName(order.getCustomerName());
-        order.setTotalPrice(order.getTotalPrice());
+        OrderEntity entity = OrderMapper.toEntity(order);
 
-        OrderEntity saved = repository.save(entity);
-
-        return new OrderResponse(
-                saved.getId(),
-                saved.getCustomerName(),
-                saved.getTotalPrice());
+        if (entity != null) {
+            OrderEntity saved = repository.save(entity);
+            return OrderMapper.toResponse(saved);
+        } else {
+            throw new RuntimeException("Order is null");
+        }
     }
 }

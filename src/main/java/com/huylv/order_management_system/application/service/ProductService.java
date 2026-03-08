@@ -8,7 +8,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
+import com.huylv.order_management_system.application.dto.ProductPageResponse;
 import com.huylv.order_management_system.application.dto.ProductRequest;
+import com.huylv.order_management_system.application.dto.ProductResponse;
 import com.huylv.order_management_system.domain.model.Product;
 import com.huylv.order_management_system.domain.repository.ProductRepository;
 import com.huylv.order_management_system.exception.ResourceNotFoundException;
@@ -50,7 +52,16 @@ public class ProductService {
         }
     }
 
-    public Page<Product> getProducts(@NonNull Pageable pageable) {
-        return repository.findAll(pageable);
+    public ProductPageResponse getProducts(@NonNull Pageable pageable) {
+        Page<Product> page = repository.findAll(pageable);
+        return new ProductPageResponse(page.getContent().stream().map(ProductResponse::fromEntity).toList(),
+            page.getNumber(),
+            page.getSize(),
+            page.getTotalElements(),
+            page.getTotalPages());
+    }
+
+    public List<Product> findByNameContaining(String name) {
+        return repository.findByNameContaining(name);
     }
 }

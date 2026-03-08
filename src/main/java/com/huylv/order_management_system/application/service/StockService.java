@@ -1,4 +1,4 @@
-package com.huylv.order_management_system.service;
+package com.huylv.order_management_system.application.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;

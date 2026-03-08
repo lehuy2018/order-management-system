@@ -1,4 +1,4 @@
-package com.huylv.order_management_system.dto;
+package com.huylv.order_management_system.application.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

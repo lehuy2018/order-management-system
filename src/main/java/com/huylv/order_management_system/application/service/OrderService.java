@@ -1,12 +1,17 @@
-package com.huylv.order_management_system.service;
+package com.huylv.order_management_system.application.service;
 
+import java.util.List;
+
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
-import com.huylv.order_management_system.entity.OrderEntity;
-import com.huylv.order_management_system.repository.OrderRepository;
+import com.huylv.order_management_system.application.dto.OrderRequest;
+import com.huylv.order_management_system.application.dto.OrderResponse;
+import com.huylv.order_management_system.domain.model.OrderEntity;
+import com.huylv.order_management_system.domain.repository.OrderRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,7 +28,7 @@ public class OrderService {
         System.out.println("Outer TX active: " +
                 TransactionSynchronizationManager.isActualTransactionActive());
 
-        repository.save(new OrderEntity("ORDER-1"));
+        repository.save(new OrderEntity("ORDER-1", 100.0));
 
         if (catchException) {
             try {
@@ -48,5 +53,29 @@ public class OrderService {
         System.out.println(
                 "Transaction active: " +
                         TransactionSynchronizationManager.isActualTransactionActive());
+    }
+
+    public List<OrderResponse> getAllOrders() {
+
+        return repository.findAll()
+                .stream()
+                .map(order -> new OrderResponse(
+                        order.getId(),
+                        order.getCustomerName(),
+                        order.getTotalPrice()))
+                .toList();
+    }
+
+    public OrderResponse createOrder(@NonNull OrderRequest order) {
+        OrderEntity entity = new OrderEntity();
+        order.setCustomerName(order.getCustomerName());
+        order.setTotalPrice(order.getTotalPrice());
+
+        OrderEntity saved = repository.save(entity);
+
+        return new OrderResponse(
+                saved.getId(),
+                saved.getCustomerName(),
+                saved.getTotalPrice());
     }
 }

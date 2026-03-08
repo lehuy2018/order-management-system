@@ -4,8 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.huylv.order_management_system.repository.OrderRepository;
-import com.huylv.order_management_system.service.OrderService;
+import com.huylv.order_management_system.application.service.OrderService;
+import com.huylv.order_management_system.domain.repository.OrderRepository;
 
 @SpringBootTest
 class TransactionTest {

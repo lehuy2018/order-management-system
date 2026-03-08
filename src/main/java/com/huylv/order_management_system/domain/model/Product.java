@@ -1,4 +1,4 @@
-package com.huylv.order_management_system.entity;
+package com.huylv.order_management_system.domain.model;
 
 import java.time.LocalDateTime;
 

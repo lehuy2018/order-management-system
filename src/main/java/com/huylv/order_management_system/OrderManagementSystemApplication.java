@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import com.huylv.order_management_system.service.OrderService;
+import com.huylv.order_management_system.application.service.OrderService;
 
 @SpringBootApplication
 public class OrderManagementSystemApplication {

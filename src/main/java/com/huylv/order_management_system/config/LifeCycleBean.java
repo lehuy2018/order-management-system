@@ -1,4 +1,4 @@
-package com.huylv.order_management_system.lifecycle;
+package com.huylv.order_management_system.config;
 
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;

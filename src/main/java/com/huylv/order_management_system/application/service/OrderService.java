@@ -12,7 +12,6 @@ import com.huylv.order_management_system.application.dto.OrderRequest;
 import com.huylv.order_management_system.application.dto.OrderResponse;
 import com.huylv.order_management_system.application.mapper.OrderMapper;
 import com.huylv.order_management_system.domain.model.OrderEntity;
-import com.huylv.order_management_system.domain.model.Product;
 import com.huylv.order_management_system.domain.repository.OrderRepository;
 
 import lombok.RequiredArgsConstructor;

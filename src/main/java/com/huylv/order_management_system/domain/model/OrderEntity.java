@@ -2,8 +2,12 @@ package com.huylv.order_management_system.domain.model;
 
 import java.util.List;
 
+import com.huylv.order_management_system.domain.enums.OrderStatus;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -20,7 +24,8 @@ public class OrderEntity {
 
     private Double totalPrice;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> items;
@@ -57,16 +62,16 @@ public class OrderEntity {
         this.totalPrice = totalPrice;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
+    public void setStatus(OrderStatus status) {
         this.status = status;
     }
 
     public List<OrderItem> getItems() {
         return items;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
     }
 
 }

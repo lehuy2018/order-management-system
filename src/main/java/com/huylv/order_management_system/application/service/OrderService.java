@@ -2,6 +2,10 @@ package com.huylv.order_management_system.application.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -11,6 +15,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import com.huylv.order_management_system.application.dto.OrderRequest;
 import com.huylv.order_management_system.application.dto.OrderResponse;
 import com.huylv.order_management_system.application.mapper.OrderMapper;
+import com.huylv.order_management_system.domain.enums.OrderStatus;
 import com.huylv.order_management_system.domain.model.OrderEntity;
 import com.huylv.order_management_system.domain.repository.OrderRepository;
 
@@ -25,12 +30,9 @@ public class OrderService {
 
     @Transactional
     public void createOrder(boolean catchException) {
-
         System.out.println("Outer TX active: " +
                 TransactionSynchronizationManager.isActualTransactionActive());
-
         repository.save(new OrderEntity("ORDER-1", 100.0));
-
         if (catchException) {
             try {
                 stockService.updateStock();
@@ -57,25 +59,40 @@ public class OrderService {
     }
 
     public List<OrderResponse> getAllOrders() {
-
         return repository.findAll()
                 .stream()
                 .map(order -> new OrderResponse(
                         order.getId(),
                         order.getCustomerName(),
-                        order.getTotalPrice()))
+                        order.getTotalPrice(),
+                        order.getStatus()))
                 .toList();
     }
 
     @Transactional
     public OrderResponse createOrder(@NonNull OrderRequest order) {
         OrderEntity entity = OrderMapper.toEntity(order);
-
         if (entity != null) {
             OrderEntity saved = repository.save(entity);
             return OrderMapper.toResponse(saved);
         } else {
             throw new RuntimeException("Order is null");
         }
+    }
+
+    @Transactional(readOnly = true)
+    public Page<OrderEntity> getOrders(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        return repository.findAll(pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<OrderEntity> getOrdersByStatus(
+            OrderStatus status,
+            int page,
+            int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+
+        return repository.findByStatus(status, pageable);
     }
 }

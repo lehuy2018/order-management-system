@@ -20,7 +20,8 @@ public class OrderMapper {
         return new OrderResponse(
                 entity.getId(),
                 entity.getCustomerName(),
-                entity.getTotalPrice()
+                entity.getTotalPrice(),
+                entity.getStatus()
         );
     }
 }

@@ -81,9 +81,10 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public Page<OrderEntity> getOrders(int page, int size) {
+    public Page<OrderResponse> getOrders(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-        return repository.findAll(pageable);
+        Page<OrderEntity> orders = repository.findAll(pageable);
+        return orders.map(OrderMapper::toResponse);
     }
 
     @Transactional(readOnly = true)

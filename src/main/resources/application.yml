@@ -17,5 +17,7 @@ spring:
 logging:
   level:
     '[org.springframework.transaction]': DEBUG
-    # org:
+    org:
     #   springframework: DEBUG
+      hibernate:
+        SQL: DEBUG

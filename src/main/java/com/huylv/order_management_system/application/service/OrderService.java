@@ -1,7 +1,5 @@
 package com.huylv.order_management_system.application.service;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +15,7 @@ import com.huylv.order_management_system.application.dto.OrderResponse;
 import com.huylv.order_management_system.application.mapper.OrderMapper;
 import com.huylv.order_management_system.domain.enums.OrderStatus;
 import com.huylv.order_management_system.domain.model.OrderEntity;
+import com.huylv.order_management_system.domain.model.OrderItem;
 import com.huylv.order_management_system.domain.repository.OrderRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -58,26 +57,16 @@ public class OrderService {
                         TransactionSynchronizationManager.isActualTransactionActive());
     }
 
-    public List<OrderResponse> getAllOrders() {
-        return repository.findAll()
-                .stream()
-                .map(order -> new OrderResponse(
-                        order.getId(),
-                        order.getCustomerName(),
-                        order.getTotalPrice(),
-                        order.getStatus()))
-                .toList();
-    }
-
     @Transactional
     public OrderResponse createOrder(@NonNull OrderRequest order) {
         OrderEntity entity = OrderMapper.toEntity(order);
-        if (entity != null) {
-            OrderEntity saved = repository.save(entity);
-            return OrderMapper.toResponse(saved);
-        } else {
-            throw new RuntimeException("Order is null");
-        }
+        OrderItem item = new OrderItem();
+        item.setProductName("Product 1");
+        item.setQuantity(1);
+        item.setPrice(10.0);
+        entity.addItem(item);
+        entity.setStatus(OrderStatus.PENDING);
+        return OrderMapper.toResponse(repository.save(entity));
     }
 
     @Transactional(readOnly = true)
@@ -95,5 +84,18 @@ public class OrderService {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
 
         return repository.findByStatus(status, pageable);
+    }
+
+    /**
+     * Lấy thông tin đơn hàng theo ID
+     * Chỗ này nếu không sử dụng @Transactionnal sẽ bị LazyInitializationException
+     * 
+     * @param id
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public OrderResponse getOrderById(@NonNull Long id) {
+        OrderEntity order = repository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
+        return OrderMapper.toResponse(order);
     }
 }

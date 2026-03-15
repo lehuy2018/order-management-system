@@ -38,7 +38,7 @@ class OrderServiceTest {
         when(orderRepository.save(any(OrderEntity.class)))
                 .thenReturn(mockOrder);
 
-        OrderResponse result = orderService.createOrder(new OrderRequest());
+        OrderResponse result = orderService.createOrder(new OrderRequest("John Doe", 100.0));
 
         assertNotNull(result);
         assertEquals(OrderStatus.PENDING, result.getStatus());

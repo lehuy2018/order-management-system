@@ -15,7 +15,10 @@ import com.huylv.order_management_system.domain.model.Product;
 import com.huylv.order_management_system.domain.repository.ProductRepository;
 import com.huylv.order_management_system.exception.ResourceNotFoundException;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class ProductService {
 
     private final ProductRepository repository;
@@ -25,6 +28,7 @@ public class ProductService {
     }
 
     public Product create(ProductRequest request) {
+        log.info("Creating product: {}", request.getName());
         Product product = new Product();
         product.setName(request.getName());
         product.setPrice(request.getPrice());

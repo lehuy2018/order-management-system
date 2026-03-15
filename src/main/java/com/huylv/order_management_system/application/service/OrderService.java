@@ -19,9 +19,11 @@ import com.huylv.order_management_system.domain.model.OrderItem;
 import com.huylv.order_management_system.domain.repository.OrderRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrderService {
 
     private final OrderRepository repository;

@@ -25,7 +25,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             .map(user -> new User(
                 user.getUsername(),
                 user.getPassword(),
-                List.of(new SimpleGrantedAuthority("ROLE_USER"))))
+                List.of(new SimpleGrantedAuthority(user.getRole()))))
             .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 }

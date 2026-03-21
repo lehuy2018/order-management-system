@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import jakarta.annotation.PostConstruct;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -21,18 +22,29 @@ public class JwtService {
 
     private final JwtProperties jwtProperties;
 
+    // Validate config ngay khi app khởi động
+    @PostConstruct
+    public void validateConfig() {
+        try {
+            // Thử decode secret key để đảm bảo format đúng
+            Decoders.BASE64.decode(jwtProperties.getSecret());
+        } catch (Exception e) {
+            throw new IllegalStateException("JWT Secret không hợp lệ (phải là chuỗi Base64). Vui lòng kiểm tra lại cấu hình 'spring.application.jwt.secret'.", e);
+        }
+    }
+
     // 1. Tạo Token
     public String generateToken(UserDetails userDetails) {
         return Jwts.builder()
-                .subject(userDetails.getUsername())
-                .claim("roles", userDetails.getAuthorities()
-                    .stream()
-                    .map(GrantedAuthority::getAuthority)
-                    .toList())
-                .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + jwtProperties.getExpiration()))
-                .signWith(getSignInKey())
-                .compact();
+            .subject(userDetails.getUsername())
+            .claim("roles", userDetails.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList())
+            .issuedAt(new Date())
+            .expiration(new Date(System.currentTimeMillis() + jwtProperties.getExpiration()))
+            .signWith(getSignInKey())
+            .compact();
     }
 
     // 2. Lấy Username từ Token

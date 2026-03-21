@@ -2,7 +2,7 @@ spring:
   application:
     name: order-management-system
     jwt:
-      secret: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwOTQ0MTE4ODAzIiwibmFtZSI6IkzDqiBWxINuIEh1eSIsImFkbWluIjp0cnVlLCJpYXQiOjE1MTYyMzkwMjJ9.bmZLpDd3b9ORSn3-EZhTllSigIVERdSAhIoOB8G-KtA
+      secret: oPbbIFxKxf+jdmd/dPrSCPKzzXLkSGZq8MScx/Ix3NI=
       expiration: 3600000
   # autoconfigure:
   #   exclude: 
@@ -16,7 +16,7 @@ spring:
     show-sql: true
     open-in-view: false
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
 logging:
   level:
     '[org.springframework.transaction]': DEBUG

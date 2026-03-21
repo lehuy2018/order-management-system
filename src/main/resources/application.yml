@@ -1,6 +1,9 @@
 spring:
   application:
     name: order-management-system
+    jwt:
+      secret: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwOTQ0MTE4ODAzIiwibmFtZSI6IkzDqiBWxINuIEh1eSIsImFkbWluIjp0cnVlLCJpYXQiOjE1MTYyMzkwMjJ9.bmZLpDd3b9ORSn3-EZhTllSigIVERdSAhIoOB8G-KtA
+      expiration: 3600000
   # autoconfigure:
   #   exclude: 
   #     - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration

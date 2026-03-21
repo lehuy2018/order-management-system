@@ -26,6 +26,9 @@ public class User implements Serializable {
     @Column(nullable = false)
     private String email;
 
+    @Column(nullable = false)
+    private String role = "ROLE_USER";
+
     // Getters and setters
     public Long getId() {
         return id;
@@ -57,5 +60,13 @@ public class User implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

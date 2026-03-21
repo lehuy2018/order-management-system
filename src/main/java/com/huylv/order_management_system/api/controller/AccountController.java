@@ -34,8 +34,7 @@ public class AccountController {
         if (user == null) {
             return ResponseEntity.notFound().build();
         }
-        // Giả sử user có phương thức getRoles() hoặc hardcode tạm thời để khớp với DTO
-        return ResponseEntity.ok(new UserInfoResponse(user.getUsername(), user.getEmail(), "ROLE_USER"));
+        return ResponseEntity.ok(new UserInfoResponse(user.getUsername(), user.getEmail(), user.getRole()));
     }
 
     @PostMapping("/register")

@@ -30,13 +30,13 @@ public class AccountService {
         if (userRepository.findByEmail(request.email()).isPresent()) {
             throw new IllegalArgumentException("Email already exists");
         }
-
         User user = new User();
         user.setUsername(request.username());
         user.setEmail(request.email());
+
         // Mã hóa mật khẩu trước khi lưu
         user.setPassword(passwordEncoder.encode(request.password()));
-        
+        user.setRole(request.role());
         userRepository.save(user);
     }
 
@@ -49,7 +49,6 @@ public class AccountService {
         // Nếu xác thực thành công, sinh token
         UserDetails userDetails = userDetailsService.loadUserByUsername(request.username());
         String token = jwtService.generateToken(userDetails);
-
         return new UserLoginResponse(token);
     }
 }

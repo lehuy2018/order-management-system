@@ -1,4 +1,4 @@
-package com.huylv.order_management_system.api.controller;
+package com.huylv.order_management_system.presentation.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

@@ -17,6 +17,7 @@ import com.huylv.order_management_system.domain.enums.OrderStatus;
 import com.huylv.order_management_system.domain.model.OrderEntity;
 import com.huylv.order_management_system.domain.model.OrderItem;
 import com.huylv.order_management_system.domain.repository.OrderRepository;
+import com.huylv.order_management_system.exception.ResourceNotFoundException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +31,7 @@ public class OrderService {
     private final StockService stockService;
 
     @Transactional
-    public void createOrder(boolean catchException) {
+    public void createOrderWithTransactionTest(boolean catchException) {
         System.out.println("Outer TX active: " +
                 TransactionSynchronizationManager.isActualTransactionActive());
         repository.save(new OrderEntity("ORDER-1", 100.0));
@@ -60,7 +61,7 @@ public class OrderService {
     }
 
     @Transactional
-    public OrderResponse createOrder(@NonNull OrderRequest order) {
+    public OrderResponse createOrder(OrderRequest order) {
         OrderEntity entity = OrderMapper.toEntity(order);
         OrderItem item = new OrderItem();
         item.setProductName("Product 1");
@@ -97,7 +98,7 @@ public class OrderService {
      */
     @Transactional(readOnly = true)
     public OrderResponse getOrderById(@NonNull Long id) {
-        OrderEntity order = repository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
+        OrderEntity order = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Order not found"));
         return OrderMapper.toResponse(order);
     }
 }

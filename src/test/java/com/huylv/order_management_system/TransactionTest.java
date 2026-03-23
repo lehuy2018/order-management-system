@@ -18,7 +18,7 @@ class TransactionTest {
 
     @Test
     void test_requires_new_catch() {
-        orderService.createOrder(true);
+        orderService.createOrderWithTransactionTest(true);
 
         System.out.println("Count: " + repository.count());
     }
@@ -26,7 +26,7 @@ class TransactionTest {
     @Test
     void test_requires_new_throw() {
         try {
-            orderService.createOrder(false);
+            orderService.createOrderWithTransactionTest(false);
         } catch (Exception ignored) {}
 
         System.out.println("Count: " + repository.count());

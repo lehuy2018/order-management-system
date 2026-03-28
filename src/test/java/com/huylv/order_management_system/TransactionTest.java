@@ -8,6 +8,7 @@ import com.huylv.order_management_system.application.service.OrderService;
 import com.huylv.order_management_system.domain.repository.OrderRepository;
 
 @SpringBootTest
+@org.springframework.test.context.ActiveProfiles("test")
 class TransactionTest {
 
     @Autowired

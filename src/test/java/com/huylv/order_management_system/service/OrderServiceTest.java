@@ -28,7 +28,6 @@ class OrderServiceTest {
     @InjectMocks
     private OrderService orderService;
 
-    @SuppressWarnings("null")
     @Test
     void shouldCreateOrderSuccessfully() {
 

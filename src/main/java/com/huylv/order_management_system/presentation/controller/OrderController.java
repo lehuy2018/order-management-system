@@ -6,6 +6,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.huylv.order_management_system.application.dto.OrderRequest;
 import com.huylv.order_management_system.application.dto.OrderResponse;
+import com.huylv.order_management_system.application.dto.UpdateOrderRequest;
 import com.huylv.order_management_system.application.service.OrderService;
 
 import jakarta.validation.Valid;
@@ -40,9 +42,17 @@ public class OrderController {
         return ResponseEntity.ok(service.createOrder(order));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<OrderResponse> update( 
+        @NonNull @PathVariable Long id,
+        @NonNull @Valid @RequestBody UpdateOrderRequest order) {
+        return ResponseEntity.ok(service.updateOrder(id, order));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<OrderResponse> getOrderById(
         @NonNull @Valid @PathVariable Long id) {
+        System.out.println("👉 Hit DB");
         return ResponseEntity.ok(service.getOrderById(id));
     }
 }

@@ -1,5 +1,7 @@
 package com.huylv.order_management_system.application.service;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +14,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 
 import com.huylv.order_management_system.application.dto.OrderRequest;
 import com.huylv.order_management_system.application.dto.OrderResponse;
+import com.huylv.order_management_system.application.dto.UpdateOrderRequest;
 import com.huylv.order_management_system.application.mapper.OrderMapper;
 import com.huylv.order_management_system.domain.enums.OrderStatus;
 import com.huylv.order_management_system.domain.model.OrderEntity;
@@ -72,7 +75,20 @@ public class OrderService {
         return OrderMapper.toResponse(repository.save(entity));
     }
 
+    @Transactional
+    @CacheEvict(value = "orders", key = "#id", beforeInvocation = false, allEntries = true)
+    public OrderResponse updateOrder(Long id, UpdateOrderRequest request) {
+        OrderEntity order = repository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+        order.setStatus(request.status());
+        order.setCustomerName(request.customerName());
+        order.setTotalPrice(request.totalPrice());
+        repository.save(order);
+        return OrderMapper.toResponse(order);
+    }
+
     @Transactional(readOnly = true)
+    @Cacheable(value = "orders", key = "'all'")
     public Page<OrderResponse> getOrders(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
         Page<OrderEntity> orders = repository.findAll(pageable);
@@ -97,6 +113,7 @@ public class OrderService {
      * @return
      */
     @Transactional(readOnly = true)
+    @Cacheable(value = "orders", key = "#id")
     public OrderResponse getOrderById(@NonNull Long id) {
         OrderEntity order = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Order not found"));
         return OrderMapper.toResponse(order);

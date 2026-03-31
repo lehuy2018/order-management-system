@@ -2,6 +2,7 @@ package com.huylv.order_management_system.application.service;
 
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -64,6 +65,7 @@ public class OrderService {
     }
 
     @Transactional
+    @CacheEvict(value = "orders", allEntries = true)
     public OrderResponse createOrder(OrderRequest order) {
         OrderEntity entity = OrderMapper.toEntity(order);
         OrderItem item = new OrderItem();
@@ -76,8 +78,11 @@ public class OrderService {
     }
 
     @Transactional
-    @CacheEvict(value = "orders", key = "#id", beforeInvocation = false, allEntries = true)
-    public OrderResponse updateOrder(Long id, UpdateOrderRequest request) {
+    @Caching(evict = {
+        @CacheEvict(value = "order_detail", key = "#id"),
+        @CacheEvict(value = "order_list", allEntries = true)
+    })
+    public OrderResponse updateOrder(@NonNull Long id, UpdateOrderRequest request) {
         OrderEntity order = repository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
         order.setStatus(request.status());
@@ -88,7 +93,15 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    @Cacheable(value = "orders", key = "'all'")
+    // Sai:
+    // - Không phân biệt page
+    // - Không phân biệt filter
+    // - Cache bị sai data
+    // @Cacheable(value = "orders", key = "'all'")
+    @Cacheable(
+        value = "order_list",
+        key = "'page:' + #page + ':size:' + #size"
+    )
     public Page<OrderResponse> getOrders(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
         Page<OrderEntity> orders = repository.findAll(pageable);
@@ -101,7 +114,6 @@ public class OrderService {
             int page,
             int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-
         return repository.findByStatus(status, pageable);
     }
 
@@ -113,7 +125,7 @@ public class OrderService {
      * @return
      */
     @Transactional(readOnly = true)
-    @Cacheable(value = "orders", key = "#id")
+    @Cacheable(value = "order_detail", key = "#id")
     public OrderResponse getOrderById(@NonNull Long id) {
         OrderEntity order = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Order not found"));
         return OrderMapper.toResponse(order);

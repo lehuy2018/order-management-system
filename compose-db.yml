@@ -1,16 +1,25 @@
 version: '3.8'
 
 services:
+  app:
+    build: .
+    container_name: order_app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/order-management
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: admin
+
   postgres:
-    image: 'postgres:16.3'
+    image: postgres:16.3
     container_name: my_postgres
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: order-management
-      TZ: Asia/Ho_Chi_Minh
-      # Nếu muốn ép PostgreSQL dùng timezone này:
-      PGTZ: Asia/Ho_Chi_Minh
     ports:
       - "5432:5432"
     volumes:

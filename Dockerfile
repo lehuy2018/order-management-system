@@ -1,15 +1,15 @@
-# Dùng Tomcat 10.1 với JDK 21 (hỗ trợ Java 21)
-FROM tomcat:10.1-jdk21
+# Sử dụng JDK 21 chính thức (ổn định, production-ready)
+FROM eclipse-temurin:21-jdk-jammy
 
-# Xoá ứng dụng mặc định (không bắt buộc)
-RUN rm -rf /usr/local/tomcat/webapps/*
+# Tạo thư mục làm việc trong container
+WORKDIR /app
 
-# Copy file WAR từ thư mục target/ (sẽ được tạo bởi Maven) vào webapps với tên ROOT.war
-# => Ứng dụng chạy ngay tại đường dẫn gốc (không cần context path)
-COPY target/*.war /usr/local/tomcat/webapps/ROOT.war
+# Copy file JAR từ máy host vào container
+# Dùng wildcard để tránh lỗi sai tên file
+COPY target/*.jar app.jar
 
-# Mở cổng Tomcat
+# Expose port (mang tính document, không bắt buộc)
 EXPOSE 8080
 
-# Chạy Tomcat
-CMD ["catalina.sh", "run"]
+# Lệnh chạy ứng dụng
+ENTRYPOINT ["java", "-jar", "app.jar"]

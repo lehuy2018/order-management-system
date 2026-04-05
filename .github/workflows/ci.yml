@@ -1,13 +1,10 @@
-name: CI/CD - Build WAR, Docker image, push to Docker Hub
+name: CI/CD - Build JAR, Docker image, push to Docker Hub
 
 on:
   push:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
-
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true   # tránh warning Node 20 (có thể bỏ nếu không muốn)
 
 jobs:
   build-and-push:
@@ -21,13 +18,12 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: '21'
-          distribution: 'temurin'        # Eclipse Temurin (OpenJDK)
-          cache: maven                   # cache Maven dependencies
+          distribution: 'temurin'
+          cache: maven
 
-      - name: Build WAR with Maven
+      - name: Build JAR with Maven
         run: mvn clean package
 
-      # (Tuỳ chọn) Liệt kê file WAR để debug
       - name: List target directory
         run: ls -l target/
 
@@ -38,9 +34,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker image
-        run: |
-          docker build -t huylv5/order-management:latest .
+        run: docker build -t huylv5/order-management:latest .
 
       - name: Push Docker image to Docker Hub
-        run: |
-          docker push huylv5/order-management:latest
+        run: docker push huylv5/order-management:latest

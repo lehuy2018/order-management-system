@@ -21,6 +21,12 @@ public class OrderManagementSystemApplication {
 		SpringApplication.run(OrderManagementSystemApplication.class, args);
 	}
 
+	/**
+	 * Tạo để lấy đúng định dạng của secret key
+	 * Xóa đi khi đã lấy và dán nó vào application.properties để sử dụng
+	 * 
+	 * @return
+	 */
 	@Bean
 	String secretKeyString() {
 		SecretKey key = Jwts.SIG.HS256.key().build(); // Tạo key ngẫu nhiên an toàn cho HS256

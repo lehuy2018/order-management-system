@@ -7,6 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 import com.huylv.order_management_system.application.service.OrderService;
 
@@ -15,6 +16,7 @@ import io.jsonwebtoken.io.Encoders;
 
 @SpringBootApplication
 @EnableCaching
+@EnableAsync
 public class OrderManagementSystemApplication {
 
 	public static void main(String[] args) {
